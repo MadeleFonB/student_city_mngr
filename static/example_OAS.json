@@ -1,0 +1,89 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Example API for BdB onboarding",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://0.0.0.0:3500"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "GreetDataType": {
+        "type": "object",
+        "description": "Estructura que contiene la información del saludo",
+        "properties": {
+          "greeting": {
+            "type": "string",
+            "maxLength": 15,
+            "minLength": 6,
+            "pattern": "^Hola [a-zA-Z]$",
+            "example": "Hola Oscar"
+          }
+        }
+      }
+    },
+    "responses": {
+      "GreetResponse": {
+        "description": "Respuesta obtenida cuando se solicita un saludo",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/GreetDataType"
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/greeting": {
+      "get": {
+        "description": "Recurso de prueba que saluda a la persona que se le indique",
+        "parameters": [
+          {
+            "examples": {
+              "X-RqUID_example": {
+                "value": "6a6e33b7-2b5b-45d5-a477-68b81413bc6c"
+              }
+            },
+            "name": "X-RqUID",
+            "description": "Identificador único de la transacción",
+            "schema": {
+              "maxLength": 36,
+              "minLength": 1,
+              "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+              "type": "string"
+            },
+            "in": "header",
+            "required": true
+          },
+          {
+            "examples": {
+              "name_example": {
+                "value": "Oscar"
+              }
+            },
+            "name": "name",
+            "description": "Nombre de la persona que se desea saludar",
+            "schema": {
+              "maxLength": 10,
+              "minLength": 1,
+              "pattern": "^[A-Z][a-zA-Z]{0,5}$",
+              "type": "string"
+            },
+            "in": "query",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "$ref": "#/components/responses/GreetResponse"
+          }
+        }
+      }
+    }
+  }
+}

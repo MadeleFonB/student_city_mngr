@@ -1,0 +1,848 @@
+{
+    "openapi": "3.0.2",
+    "info": {
+        "title": "student_city_api",
+        "version": "1.0.0",
+        "description": "STUDENT CITY API - Designed for BdB Onboarding"
+    },
+    "servers": [
+        {"url":"http://0.0.0.0:3500"}
+      ],
+    "paths": {
+        "/getStudents": {
+            "description": "Recurso para obtener un listado con la información personal de hasta máximo 10 estudiantes",
+            "get": {
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/GetStudentsResponse"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "X-RqUID_example": {
+                            "value": "6a6e33b7-2b5b-45d5-a477-68b81413bc6c"
+                        }
+                    },
+                    "name": "X-RqUID",
+                    "description": "Identificador único de la transacción",
+                    "schema": {
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-Channel_example": {
+                            "value": "WEB"
+                        }
+                    },
+                    "name": "X-Channel",
+                    "description": "Canal origen de consumo de la transacción",
+                    "schema": {
+                        "enum": [
+                            "WEB",
+                            "OFFICE"
+                        ],
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CustIdentNum_example": {
+                            "value": "102934055"
+                        }
+                    },
+                    "name": "X-CustIdentNum",
+                    "description": "Numero del documento",
+                    "schema": {
+                        "maxLength": 25,
+                        "minLength": 1,
+                        "pattern": "^[a-zA-Z0-9]*$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CIPAddr_example": {
+                            "value": "127.0.0.1"
+                        }
+                    },
+                    "name": "X-IPAddr",
+                    "description": "IPv4 origen de la invocación",
+                    "schema": {
+                        "maxLength": 512,
+                        "minLength": 1,
+                        "pattern": "^(?:(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)(?:\\.(?!$)|$)){4}$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-Name_example": {
+                            "value": "Onboarding"
+                        }
+                    },
+                    "name": "X-Name",
+                    "description": "Nombre de la aplicación que consume la API",
+                    "schema": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CustIdentType_example": {
+                            "value": "CC"
+                        }
+                    },
+                    "name": "X-CustIdentType",
+                    "description": "Tipo de identificación usuario que genera la invocación",
+                    "schema": {
+                        "enum": [
+                            "CC",
+                            "CE",
+                            "LC",
+                            "NI",
+                            "OT",
+                            "PA",
+                            "RC",
+                            "TI"
+                        ],
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "limit_example": {
+                            "value": "3"
+                        }
+                    },
+                    "name": "limit",
+                    "description": "Número máximo de estudiantes cuya información se espera recuperar, el valor máximo esperado es 10",
+                    "schema": {
+                        "maxLength": 2,
+                        "minLength": 1,
+                        "pattern": "^([1-9]|10)$",
+                        "type": "string"
+                    },
+                    "in": "query",
+                    "required": true
+                }
+            ]
+        },
+        "/getStudentById": {
+            "description": "Recurso para obtener toda la información asociada a un estudiante",
+            "get": {
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/GetStudentByIdResponse"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "X-RqUID_example": {
+                            "value": "6a6e33b7-2b5b-45d5-a477-68b81413bc6c"
+                        }
+                    },
+                    "name": "X-RqUID",
+                    "description": "Identificador único de la transacción",
+                    "schema": {
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-Channel_example": {
+                            "value": "WEB"
+                        }
+                    },
+                    "name": "X-Channel",
+                    "description": "Canal origen de consumo de la transacción",
+                    "schema": {
+                        "enum": [
+                            "WEB",
+                            "OFFICE"
+                        ],
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CustIdentNum_example": {
+                            "value": "102934055"
+                        }
+                    },
+                    "name": "X-CustIdentNum",
+                    "description": "Numero del documento",
+                    "schema": {
+                        "maxLength": 25,
+                        "minLength": 1,
+                        "pattern": "^[a-zA-Z0-9]*$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CIPAddr_example": {
+                            "value": "127.0.0.1"
+                        }
+                    },
+                    "name": "X-IPAddr",
+                    "description": "IPv4 origen de la invocación",
+                    "schema": {
+                        "maxLength": 512,
+                        "minLength": 1,
+                        "pattern": "^(?:(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)(?:\\.(?!$)|$)){4}$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-Name_example": {
+                            "value": "Onboarding"
+                        }
+                    },
+                    "name": "X-Name",
+                    "description": "Nombre de la aplicación que consume la API",
+                    "schema": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CustIdentType_example": {
+                            "value": "CC"
+                        }
+                    },
+                    "name": "X-CustIdentType",
+                    "description": "Tipo de identificación usuario que genera la invocación",
+                    "schema": {
+                        "enum": [
+                            "CC",
+                            "CE",
+                            "LC",
+                            "NI",
+                            "OT",
+                            "PA",
+                            "RC",
+                            "TI"
+                        ],
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "studentId_example": {
+                            "value": "d61c560a-fd2c-4972-bcd9-5e8fa9560b39"
+                        }
+                    },
+                    "name": "studentId",
+                    "description": "Identificador único del estudiante",
+                    "schema": {
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string"
+                    },
+                    "in": "query",
+                    "required": true
+                }
+            ]
+        },
+        "/addStudent": {
+            "description": "Recurso para registrar la información personal de un nuevo estudiante",
+            "post": {
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/StudentDataType"
+                            }
+                        }
+                    },
+                    "required": true
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/AddStudentResponse"
+                    }
+                }
+            },
+            "parameters": [
+                {
+                    "examples": {
+                        "X-RqUID_example": {
+                            "value": "6a6e33b7-2b5b-45d5-a477-68b81413bc6c"
+                        }
+                    },
+                    "name": "X-RqUID",
+                    "description": "Identificador único de la transacción",
+                    "schema": {
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-Channel_example": {
+                            "value": "WEB"
+                        }
+                    },
+                    "name": "X-Channel",
+                    "description": "Canal origen de consumo de la transacción",
+                    "schema": {
+                        "enum": [
+                            "WEB",
+                            "OFFICE"
+                        ],
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CustIdentNum_example": {
+                            "value": "102934055"
+                        }
+                    },
+                    "name": "X-CustIdentNum",
+                    "description": "Numero del documento",
+                    "schema": {
+                        "maxLength": 25,
+                        "minLength": 1,
+                        "pattern": "^[a-zA-Z0-9]*$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CIPAddr_example": {
+                            "value": "127.0.0.1"
+                        }
+                    },
+                    "name": "X-IPAddr",
+                    "description": "IPv4 origen de la invocación",
+                    "schema": {
+                        "maxLength": 512,
+                        "minLength": 1,
+                        "pattern": "^(?:(?:25[0-5]|2[0-4]\\d|1?\\d?\\d)(?:\\.(?!$)|$)){4}$",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-Name_example": {
+                            "value": "Onboarding"
+                        }
+                    },
+                    "name": "X-Name",
+                    "description": "Nombre de la aplicación que consume la API",
+                    "schema": {
+                        "maxLength": 64,
+                        "minLength": 1,
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                },
+                {
+                    "examples": {
+                        "X-CustIdentType_example": {
+                            "value": "CC"
+                        }
+                    },
+                    "name": "X-CustIdentType",
+                    "description": "Tipo de identificación usuario que genera la invocación",
+                    "schema": {
+                        "enum": [
+                            "CC",
+                            "CE",
+                            "LC",
+                            "NI",
+                            "OT",
+                            "PA",
+                            "RC",
+                            "TI"
+                        ],
+                        "type": "string"
+                    },
+                    "in": "header",
+                    "required": true
+                }
+            ]
+        }
+    },
+    "components": {
+        "schemas": {
+            "BuildingDataType": {
+                "title": "Root Type for BuildingDataType",
+                "description": "Estructura que contiene la información de un edificio",
+                "required": [
+                    "elevation",
+                    "latitude",
+                    "longitude",
+                    "name",
+                    "id"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Identificador único del registro",
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string",
+                        "example": "800e2b0b-1f71-46b3-8edc-a61117f2f158"
+                    },
+                    "name": {
+                        "description": "Nombre común de la edificación",
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string",
+                        "example": "Polideportivo 2"
+                    },
+                    "latitude": {
+                        "format": "double",
+                        "description": "Latitud en la que se encuentran los cimientos del edificio, expresada en grados decimales",
+                        "type": "number",
+                        "example": "4.623368506553804"
+                    },
+                    "longitude": {
+                        "format": "double",
+                        "description": "Longitud en la que se encuentran los cimientos del edificio, expresada en grados decimales",
+                        "type": "number",
+                        "example": "-74.06736066774384"
+                    },
+                    "elevation": {
+                        "format": "int32",
+                        "description": "Elevación en la que se encuentran los cimientos del edificio, expresada en metros",
+                        "maximum": 5775,
+                        "minimum": 1,
+                        "type": "integer",
+                        "example": "2625"
+                    }
+                },
+                "example": {
+                    "id": "800e2b0b-1f71-46b3-8edc-a61117f2f158",
+                    "name": "Polideportivo 2",
+                    "latitude": 4.623368506553804,
+                    "longitude": -74.06736066774384,
+                    "elevation": 2625
+                }
+            },
+            "ClassroomDataType": {
+                "title": "Root Type for ClassroomDef",
+                "description": "Estructura que contiene la información de un aula",
+                "type": "object",
+                "allOf": [
+                    {
+                        "required": [
+                            "building",
+                            "number",
+                            "id",
+                            "floor"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "id": {
+                                "description": "Identificador único del registro",
+                                "maxLength": 36,
+                                "minLength": 1,
+                                "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                                "type": "string",
+                                "example": "981ce728-c123-4103-b4f8-b533440a9a54"
+                            },
+                            "floor": {
+                                "format": "int32",
+                                "description": "Piso donde se encuentra el aula",
+                                "maximum": 5,
+                                "minimum": 1,
+                                "type": "integer",
+                                "example": "2"
+                            },
+                            "wing": {
+                                "description": "Ala donde se encuentra el aula",
+                                "enum": [
+                                    "Norte",
+                                    "Sur",
+                                    "Este",
+                                    "Oeste"
+                                ],
+                                "type": "string",
+                                "example": "Norte"
+                            },
+                            "number": {
+                                "format": "int32",
+                                "description": "Número del aula",
+                                "type": "integer",
+                                "example": "1"
+                            },
+                            "building": {
+                                "$ref": "#/components/schemas/BuildingDataType",
+                                "description": "Edificio donde se encuentra el aula",
+                                "example": "{\n    \"id\": \"800e2b0b-1f71-46b3-8edc-a61117f2f158\",\n    \"name\": \"Polideportivo 2\",\n    \"latitude\": 4.623368506553804,\n    \"longitude\": -74.06736066774384,\n    \"elevation\": 2625\n}"
+                            }
+                        }
+                    }
+                ],
+                "example": {
+                    "id": "981ce728-c123-4103-b4f8-b533440a9a54",
+                    "building": {
+                        "id": "800e2b0b-1f71-46b3-8edc-a61117f2f158",
+                        "name": "Polideportivo 2",
+                        "latitude": 4.623368506553804,
+                        "longitude": -74.06736066774384,
+                        "elevation": 2625
+                    },
+                    "floor": 2,
+                    "wing": "Norte",
+                    "number": 1
+                }
+            },
+            "CourseDataType": {
+                "title": "Root Type for CourseDef",
+                "description": "Estructura que contiene la información de un curso",
+                "required": [
+                    "classroom",
+                    "id",
+                    "homeroomTeacher",
+                    "category",
+                    "description",
+                    "year"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Identificador único del registro",
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string",
+                        "example": "981495ef-f7f6-4809-ba76-b54d36e3b111"
+                    },
+                    "description": {
+                        "description": "Descripción del curso",
+                        "type": "string",
+                        "example": "5-1"
+                    },
+                    "homeroomTeacher": {
+                        "description": "Nombre del profesor encargado de la clase",
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string",
+                        "example": "Ignacio Torres"
+                    },
+                    "category": {
+                        "description": "Categoría del curso",
+                        "enum": [
+                            "Primaria",
+                            "Secundaria",
+                            "Preparatoria"
+                        ],
+                        "type": "string",
+                        "example": "Primaria"
+                    },
+                    "year": {
+                        "format": "int32",
+                        "description": "Año en el que se realiza el curso",
+                        "type": "integer",
+                        "example": "2020"
+                    },
+                    "classroom": {
+                        "$ref": "#/components/schemas/ClassroomDataType",
+                        "description": "Salón donde se ubica la clase",
+                        "properties": {
+                            "id": {
+                                "type": "string"
+                            },
+                            "building": {
+                                "type": "object",
+                                "properties": {
+                                    "id": {
+                                        "type": "string"
+                                    },
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "latitude": {
+                                        "format": "double",
+                                        "type": "number"
+                                    },
+                                    "longitude": {
+                                        "format": "double",
+                                        "type": "number"
+                                    },
+                                    "elevation": {
+                                        "format": "int32",
+                                        "type": "integer"
+                                    }
+                                }
+                            },
+                            "floor": {
+                                "format": "int32",
+                                "type": "integer"
+                            },
+                            "wing": {
+                                "type": "string"
+                            },
+                            "number": {
+                                "format": "int32",
+                                "type": "integer"
+                            }
+                        },
+                        "example": "{\n    \"id\": \"981ce728-c123-4103-b4f8-b533440a9a54\",\n    \"building\": {\n        \"id\": \"800e2b0b-1f71-46b3-8edc-a61117f2f158\",\n        \"name\": \"Polideportivo 2\",\n        \"latitude\": 4.623368506553804,\n        \"longitude\": -74.06736066774384,\n        \"elevation\": 2625\n    },\n    \"floor\": 2,\n    \"wing\": \"Norte\",\n    \"number\": 1\n}"
+                    }
+                },
+                "example": {
+                    "id": "981495ef-f7f6-4809-ba76-b54d36e3b111",
+                    "description": "5-1",
+                    "homeroomTeacher": "Ignacio Torres",
+                    "category": "Primaria",
+                    "year": 2020,
+                    "classroom": {
+                        "id": "981ce728-c123-4103-b4f8-b533440a9a54",
+                        "building": {
+                            "id": "800e2b0b-1f71-46b3-8edc-a61117f2f158",
+                            "name": "Polideportivo 2",
+                            "latitude": 4.623368506553804,
+                            "longitude": -74.06736066774384,
+                            "elevation": 2625
+                        },
+                        "floor": 2,
+                        "wing": "Norte",
+                        "number": 1
+                    }
+                }
+            },
+            "StudentCoursesDataType": {
+                "title": "Root Type for StudentCoursesDef",
+                "description": "Estructura que contiene la información de un estudiante y los distintos cursos que ha tenido",
+                "type": "object",
+                "allOf": [
+                    {
+                        "required": [
+                            "courses"
+                        ],
+                        "type": "object",
+                        "properties": {
+                            "courses": {
+                                "description": "Listado de cursos que ha tenido el estudiante",
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/CourseDataType"
+                                },
+                                "example": "[\n    {\n        \"id\": \"981495ef-f7f6-4809-ba76-b54d36e3b111\",\n        \"description\": \"5-1\",\n        \"homeroomTeacher\": \"Ignacio Torres\",\n        \"category\": \"Primaria\",\n        \"year\": 2020,\n        \"classroom\": {\n            \"id\": \"981ce728-c123-4103-b4f8-b533440a9a54\",\n            \"building\": {\n                \"id\": \"800e2b0b-1f71-46b3-8edc-a61117f2f158\",\n                \"name\": \"Polideportivo 2\",\n                \"latitude\": 4.623368506553804,\n                \"longitude\": -74.06736066774384,\n                \"elevation\": 2625\n            },\n            \"floor\": 2,\n            \"wing\": \"Norte\",\n            \"number\": 1\n        }\n    },\n    {\n        \"id\": \"18177fec-ff77-4c4f-9d09-de12628fb2e8\",\n        \"description\": \"4-1\",\n        \"homeroomTeacher\": \"Claudia Benitez\",\n        \"category\": \"Primaria\",\n        \"year\": 2019,\n        \"classroom\": {\n            \"id\": \"5640d13f-4238-42a9-881b-5a6782fe4f6b\",\n            \"building\": {\n                \"id\": \"800e2b0b-1f71-46b3-8edc-a61117f2f158\",\n                \"name\": \"Polideportivo 2\",\n                \"latitude\": 4.623368506553804,\n                \"longitude\": -74.06736066774384,\n                \"elevation\": 2625\n            },\n            \"floor\": 1,\n            \"wing\": \"Sur\",\n            \"number\": 3\n        }\n    }\n]"
+                            }
+                        }
+                    },
+                    {
+                        "$ref": "#/components/schemas/StudentDataType"
+                    }
+                ],
+                "example": {
+                    "id": "ce73c18a-c0aa-44cb-b81b-24c7abf490f6",
+                    "names": "Habrilia Madera",
+                    "lastnames": "Sevilla",
+                    "birthDate": "23/03/2005",
+                    "address": "AK 43 # 67-09",
+                    "courses": [
+                        {
+                            "id": "981495ef-f7f6-4809-ba76-b54d36e3b111",
+                            "description": "5-1",
+                            "homeroomTeacher": "Ignacio Torres",
+                            "category": "Primaria",
+                            "year": 2020,
+                            "classroom": {
+                                "id": "981ce728-c123-4103-b4f8-b533440a9a54",
+                                "building": {
+                                    "id": "800e2b0b-1f71-46b3-8edc-a61117f2f158",
+                                    "name": "Polideportivo 2",
+                                    "latitude": 4.623368506553804,
+                                    "longitude": -74.06736066774384,
+                                    "elevation": 2625
+                                },
+                                "floor": 2,
+                                "wing": "Norte",
+                                "number": 1
+                            }
+                        },
+                        {
+                            "id": "18177fec-ff77-4c4f-9d09-de12628fb2e8",
+                            "description": "4-1",
+                            "homeroomTeacher": "Claudia Benitez",
+                            "category": "Primaria",
+                            "year": 2019,
+                            "classroom": {
+                                "id": "5640d13f-4238-42a9-881b-5a6782fe4f6b",
+                                "building": {
+                                    "id": "800e2b0b-1f71-46b3-8edc-a61117f2f158",
+                                    "name": "Polideportivo 2",
+                                    "latitude": 4.623368506553804,
+                                    "longitude": -74.06736066774384,
+                                    "elevation": 2625
+                                },
+                                "floor": 1,
+                                "wing": "Sur",
+                                "number": 3
+                            }
+                        }
+                    ]
+                }
+            },
+            "StudentIdDataType": {
+                "title": "Root Type for StudentIdDef",
+                "description": "Estructura que contiene la identificación única que le corresponde al estudiante recien creado",
+                "required": [
+                    "studentId"
+                ],
+                "type": "object",
+                "properties": {
+                    "studentId": {
+                        "description": "Identificador único del registro",
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string",
+                        "example": "3debf424-4c05-43c1-8ef1-c617a68e8c57"
+                    }
+                },
+                "example": {
+                    "studentId": "3debf424-4c05-43c1-8ef1-c617a68e8c57"
+                }
+            },
+            "StudentDataType": {
+                "title": "Root Type for StudentDef",
+                "description": "Estructura que contiene la información personal de un estudiante",
+                "required": [
+                    "address",
+                    "birthDate",
+                    "lastnames",
+                    "names"
+                ],
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "description": "Identificador único del registro",
+                        "maxLength": 36,
+                        "minLength": 1,
+                        "pattern": "^[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12}$",
+                        "type": "string",
+                        "example": "ce73c18a-c0aa-44cb-b81b-24c7abf490f6"
+                    },
+                    "names": {
+                        "description": "Nombres del estudiante",
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string",
+                        "example": "Habrilia Madera"
+                    },
+                    "lastnames": {
+                        "description": "Apellidos del estudiante",
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string",
+                        "example": "Sevilla"
+                    },
+                    "birthDate": {
+                        "description": "Fecha de nacimiento, en formarto DD/MM/YYYY",
+                        "pattern": "^(0?[1-9]|[12][0-9]|3[01])[\\/\\-](0?[1-9]|1[012])[\\/\\-]\\d{4}$",
+                        "type": "string",
+                        "example": "23/03/2005"
+                    },
+                    "address": {
+                        "description": "Dirección de residencia",
+                        "pattern": "^(?!.*<[^>]+>).*",
+                        "type": "string",
+                        "example": "AK 43 # 67-09"
+                    }
+                },
+                "example": {
+                    "id": "ce73c18a-c0aa-44cb-b81b-24c7abf490f6",
+                    "names": "Habrilia Madera",
+                    "lastnames": "Sevilla",
+                    "birthDate": "23/03/2005",
+                    "address": "AK 43 # 67-09"
+                }
+            }
+        },
+        "responses": {
+            "AddStudentResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/StudentIdDataType"
+                        }
+                    }
+                },
+                "description": "Respuesta obtenida cuando se crea un nuevo estudiante"
+            },
+            "GetStudentByIdResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/StudentCoursesDataType"
+                        }
+                    }
+                },
+                "description": "Respuesta obtenida cuando se solicita toda la información de un estudiante en concreto"
+            },
+            "GetStudentsResponse": {
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/components/schemas/StudentDataType"
+                            }
+                        }
+                    }
+                },
+                "description": "Respuesta obtenida cuando se solicita la información personal de 3 estudiantes"
+            }
+        }
+    }
+}
